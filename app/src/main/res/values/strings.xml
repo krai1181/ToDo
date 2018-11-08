@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ToDo List</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_a_new_task">+ add a new task</string>
+    <string name="create_account">Create account</string>
+    <string name="log_in">Log in</string>
+    <string name="what_are_you_doing_today">What are you doing today?</string>
+    <string name="done">Done</string>
+    <string name="nothing_to_do">Nothing to do</string>
+    <string name="what_is_to_be_done">What is to be done?</string>
+    <string name="due_date">Due date</string>
+    <string name="enter">ENTER</string>
+    <string name="cancel">CANCEL</string>
+    <string name="back">back</string>
+    <string name="enter_task_here">Enter Task here</string>
+    <string name="ok">OK</string>
+</resources>
