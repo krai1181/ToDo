@@ -94,7 +94,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
         myViewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: " +  myList.get(position));
+                Log.d(TAG, "onClick:  " +  myList.get(position));
                 removeAt(position);
 
                 mAuth = FirebaseAuth.getInstance();

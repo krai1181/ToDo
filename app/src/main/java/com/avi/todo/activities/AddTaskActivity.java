@@ -1,9 +1,12 @@
 package com.avi.todo.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 
 import com.avi.todo.MyAssignment;
+import com.avi.todo.MyNotificationReceiver;
 import com.avi.todo.MyTask;
 import com.avi.todo.R;
 import com.avi.todo.fragments.CalendarPickerFragment;
@@ -36,10 +40,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     CalendarPickerFragment calendarPickerFragment;
     TimeFragment timeFragment;
-    public ImageButton imgCalendar, imgTime;
+    public ImageButton imgCalendar, imgTime, imageCancelCalendar, imgCancelTime;
     public EditText editWhatTodo, editDue, editTime;
     Toolbar addTool;
     Intent i;
+    Context context;
     private static final String TAG = "AddTaskActivity";
 
 
@@ -47,7 +52,14 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseDatabase database;
     private DatabaseReference myReference;
 
-    private String userID;
+      private String userID;
+
+      private DatePicker datePicker;
+      private TimePicker timePicker;
+
+    //we set a tag to be able to cancel all work of this type if needed
+    public static final String workTag = "notificationWork";
+
 
 
     @Override
@@ -70,6 +82,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         imgCalendar.setOnClickListener(this);
         imgTime = findViewById(R.id.imageTime);
         imgTime.setOnClickListener(this);
+
+        imageCancelCalendar = findViewById(R.id.imageCancelCalendar);
+        imageCancelCalendar.setOnClickListener(this);
+        imgCancelTime = findViewById(R.id.imageCancelTime);
+        imgCancelTime.setOnClickListener(this);
 
         //create calender fragment
         calendarPickerFragment = new CalendarPickerFragment();
@@ -101,9 +118,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         userID = user.getUid();
 
         myReference = database.getReference("Users").child(userID).child("Assignments");
-       // myReference.child(userID);
-       // String postId = myReference.getKey();
-
+        // myReference.child(userID);
+        // String postId = myReference.getKey();
 
     }
 
@@ -118,6 +134,12 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.editTime:
             case R.id.imageTime:
                 timeFragment.show(getSupportFragmentManager(), "time fragment");
+                break;
+            case R.id.imageCancelCalendar:
+                editDue.getText().clear();
+                break;
+            case R.id.imageCancelTime:
+                editTime.getText().clear();
                 break;
         }
 
@@ -136,7 +158,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 String txt = editWhatTodo.getText().toString();
                 String date = editDue.getText().toString();
                 String time = editTime.getText().toString();
-                MyAssignment assignment = new MyAssignment(txt, date,time);
+                MyAssignment assignment = new MyAssignment(txt, date, time);
                 if (txt.isEmpty())
                     Toast.makeText(this, "There is no new assignment", Toast.LENGTH_LONG).show();
                 else {
@@ -145,8 +167,20 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     //adding new assignment to database
                     myReference.push().setValue(assignment);
-                    finish();
 
+                  /*
+                    Calendar calendar = Calendar.getInstance();
+                    if (android.os.Build.VERSION.SDK_INT >= 23) {
+                        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                                timePicker.getHour(), timePicker.getMinute(), 0);
+                    } else {
+                        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                                timePicker.getCurrentHour(), timePicker.getCurrentMinute(), 0);
+                    }
+
+                    setAlarm(calendar.getTimeInMillis());*/
+
+                    finish();
                 }
                 break;
         }
@@ -164,6 +198,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
         editTime.setText(hourOfDay + " : " + minute);
+
+        if (!editTime.getText().toString().isEmpty())
+            imgCancelTime.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -178,5 +215,48 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             editTime.setVisibility(View.VISIBLE);
             imgTime.setVisibility(View.VISIBLE);
         }
+        if (!editDue.getText().toString().isEmpty())
+            imageCancelCalendar.setVisibility(View.VISIBLE);
+
     }
+
+
+
+    public void setAlarm(long time){
+        //long time = System.currentTimeMillis();
+        Intent notifyIntent = new Intent(this,MyNotificationReceiver.class);
+        PendingIntent alarmIntent = PendingIntent .getBroadcast
+                (this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+      /*  // get a Calendar and set the time to 14:00:00
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.MONTH,1);
+        startTime.set(Calendar.DAY_OF_MONTH,16);
+        startTime.set(Calendar.HOUR_OF_DAY, 11);
+        startTime.set(Calendar.MINUTE, 22);
+
+        // get a Calendar at the current time
+        Calendar now = Calendar.getInstance();
+
+        if (now.before(startTime)) {
+            // it's not 14:00 yet, start today
+            time = startTime.getTimeInMillis();
+        } else {
+            // start 14:00 tomorrow
+            startTime.add(Calendar.DATE, 1);
+            time = startTime.getTimeInMillis();
+        }
+
+*/
+        // set the alarm
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            alarmManager.set(AlarmManager.RTC, time, alarmIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.RTC, time, alarmIntent);
+        }
+    }
+
+
+
 }

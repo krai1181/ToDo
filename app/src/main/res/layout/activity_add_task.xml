@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/addTool"
-        layout="@layout/toolbar" />1
+        layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/textWhattodo"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="11dp"
         android:layout_marginTop="70dp"
         android:text="@string/what_is_to_be_done"
         android:textColor="@color/colorAccent"
@@ -28,8 +28,9 @@
         android:id="@+id/editWhatTodo"
         android:layout_width="276dp"
         android:layout_height="40dp"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textWhattodo"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="110dp"
         android:hint="@string/enter_task_here"
         android:outlineSpotShadowColor="@color/colorAccent" />
@@ -38,8 +39,9 @@
         android:id="@+id/txtDue"
         android:layout_width="wrap_content"
         android:layout_height="28dp"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textWhattodo"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="178dp"
         android:text="@string/due_date"
         android:textColor="@color/colorAccent"
@@ -49,37 +51,67 @@
         android:id="@+id/editDue"
         android:layout_width="279dp"
         android:layout_height="44dp"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/textWhattodo"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="217dp"
+        android:enabled="false"
         android:hint="Date not set" />
+
 
     <ImageButton
         android:id="@+id/imageCalendar"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/editDue"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@id/editDue"
+        android:layout_marginEnd="2dp"
         android:background="@color/colorBackground"
         app:srcCompat="@drawable/ic_today" />
+    <ImageButton
+        android:id="@+id/imageCancelCalendar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignTop="@id/imageCalendar"
+        android:layout_toEndOf="@id/imageCalendar"
+        android:src="@drawable/ic_clear_red_24dp"
+        android:background="@color/colorBackground"
+        android:layout_marginEnd="5dp"
+        android:visibility="invisible"/>
+    <ImageButton
+        android:id="@+id/imageCancelTime"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignTop="@id/imageTime"
+        android:layout_toEndOf="@id/imageTime"
+        android:visibility="invisible"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_clear_red_24dp"
+        android:background="@color/colorBackground"
+        />
 
     <EditText
         android:id="@+id/editTime"
         android:layout_width="279dp"
         android:layout_height="44dp"
+        android:layout_below="@+id/imageCalendar"
         android:layout_alignStart="@+id/textWhattodo"
-        android:layout_centerVertical="true"
-        android:hint="What about time?"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="3dp"
+        android:enabled="false"
+        android:hint="@string/what_about_time"
         android:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/imageTime"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:visibility="invisible"
-        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/editTime"
+        android:layout_toEndOf="@id/editDue"
+        android:layout_marginEnd="2dp"
         android:background="@color/colorBackground"
+        android:visibility="invisible"
         app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
 

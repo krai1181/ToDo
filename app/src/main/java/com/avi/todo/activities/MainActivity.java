@@ -78,53 +78,13 @@ public class MainActivity extends AppCompatActivity {
 
         myReference = database.getReference("Users").child(userID);
 
-
-
         readFromFirebase();
-
-        /*mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
-
-        myReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                MyAssignment item = dataSnapshot.getValue(MyAssignment.class);
-
-                new MyTask(getApplicationContext()).execute();
-
-                if(item != null) {
-                    addAssigments(item);
-                }
-                checkingVisibility();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-*/
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // dialogFragment.show(getSupportFragmentManager(), "dialog fragment");
                 callActivity(AddTaskActivity.class);
 
             }
